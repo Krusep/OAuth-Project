@@ -1,22 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask
 from datetime import datetime, timedelta
 from random import randint
 app = Flask(__name__)
-
-
-# Client
-@app.route('/') # Skal have knap der sender til auth
-def index():
-    return '<a href="http://10.192.105.100:5000/authorization"><button>Get authorized!</button></a>'
-
-@app.route('/logged-in/<token>') # Kommer tilbage fra authorization
-def fetch_resource(token): # request resource fra resource server vha token
-    url = '\"http://10.192.105.100:5000/resource/%s\"' % token
-    return '<p> Added token: ' + token + '</p> <a href=' + url + '><button>Fetch resource</button></a>'
-
-@app.route('/final/<resource>')
-def display_resource(resource):
-    return 'Your resource is: %s' % resource
 
 
 # Authorization server
@@ -41,6 +26,6 @@ def return_resource(token):
             resource = 'Your access token has expired'
     else:
         resource = 'Access denied'
-    url = 'http://10.192.105.100:5000/final/%s' % resource
+        url = 'http://10.192.105.100:5000/final/%s' % resource
     return '<script> window.location = \"%s\" </script>' % url
 
