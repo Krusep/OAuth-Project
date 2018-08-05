@@ -8,13 +8,9 @@ app = Flask(__name__)
 def index():
     return '<a href="http://10.192.105.100:5000/authorization"><button>Get authorized!</button></a>'
 
-@app.route('/logged-in/<token>') # Kommer tilbage fra authorization
+@app.route('/redirected/<token>') # Kommer tilbage fra authorization
 def fetch_resource(token): # request resource fra resource server vha token
-    return '<p> Added token: %s </p> <a href="http://10.192.105.100:5000/resource"><button>Fetch resource</button></a>' % token
-
-@app.route('/final/<resource>')
-def display_resource(resource):
-    return 'Your resource is: %s' % resource
+    return 'Added token: %s' % token
 
 
 # Authorization server
@@ -25,11 +21,6 @@ def authorize():
     token = randint(0,10000)
     tokens.append(token)
     # return 'Added token: %s' % token
-    return '<a href="http://10.192.105.100:5000/logged-in/%s"><button>Log in</button></a>' % token
+    return render_template('authorization.html')
 
 # Resource server
-@app.route('/resource') # should redirect back to client w/ resource immediately
-def return_resource():
-    resource = randint(0,10)
-    url = 'http://10.192.105.100:5000/final/%s' % resource
-    return '<script> window.location = \"%s\" </script>' % url
